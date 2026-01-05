@@ -22,29 +22,26 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
-        http
-                // CSRF deaktiv (JWT üçün normaldır)
+        return http
                 .csrf(csrf -> csrf.disable())
 
-                // Request icazələri
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login/**").permitAll()
+                        .requestMatchers("/login/save", "/login/auth").permitAll()
                         .anyRequest().authenticated()
                 )
 
-                // Stateless session (JWT)
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
 
-                // Custom AuthenticationProvider
                 .authenticationProvider(authenticationProvider)
 
-                // JWT filter
                 .addFilterBefore(jwtAuthenticationFilter,
                         UsernamePasswordAuthenticationFilter.class
-                );
+                )
 
-        return http.build();
+                .build();
     }
+
+
 }

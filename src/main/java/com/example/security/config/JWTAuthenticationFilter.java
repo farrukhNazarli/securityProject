@@ -20,8 +20,8 @@ import java.io.IOException;
 @Component
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
-    private  JWTService jwtService;
-    private UserDetailsService userDetailsService;
+    private final JWTService jwtService;
+    private final UserDetailsService userDetailsService;
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException,
             IOException {
@@ -29,7 +29,7 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         final String jwt;
         final String userName;
 
-        if (header == null || header.startsWith("Bearer ")) {
+        if (header == null || !header.startsWith("Bearer ")) {
             filterChain.doFilter(request, response);
             return;
         }
